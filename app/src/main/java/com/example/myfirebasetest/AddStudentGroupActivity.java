@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,13 +15,19 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class AddStudentGroupActivity extends AppCompatActivity implements View.OnClickListener {
+import java.util.HashMap;
+import java.util.Map;
+
+public class AddStudentGroupActivity extends AppCompatActivity {
 
     private TextInputLayout enterTitle;
 
@@ -31,7 +38,6 @@ public class AddStudentGroupActivity extends AppCompatActivity implements View.O
 
     String type;
 
-    ProgressDialog p1;
 
     @Override
     public void onBackPressed() {
@@ -48,10 +54,16 @@ public class AddStudentGroupActivity extends AppCompatActivity implements View.O
         FirebaseApp.initializeApp(this);
         enterTitle=(TextInputLayout)findViewById(R.id.titleEt);
         buttonAddStGr=(Button)findViewById(R.id.buttonAddStGr);
-        p1=new ProgressDialog(this);
-        p1.setCancelable(false);
         db= FirebaseFirestore.getInstance();
-        buttonAddStGr.setOnClickListener(this);
+        //buttonAddStGr.setOnClickListener(addStudentGroup);
+
+        buttonAddStGr.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                addStudentGroup();
+            }
+        });
 
     }
 
@@ -77,61 +89,28 @@ public class AddStudentGroupActivity extends AppCompatActivity implements View.O
 
 
 
-    private void addStudentGroup()
-    {
+    private void addStudentGroup() {
+        final String title=enterTitle.getEditText().getText().toString().trim();
 
-        boolean res=(verifyTitle());
-        if(res==true)
-            return;
-        else
-        {
+        Map<String, Object> data = new HashMap<>();
+        data.put("form", title);
+        //data.put("bookTitle", "111c");
+        //data.put("bookType", "111c");
+        //data.put("bookId", "111c");
 
-            p1.setMessage("Pridedama klasė");
-            p1.show();
-            final String title=enterTitle.getEditText().getText().toString().trim();
-            String title1 = new String(title);
-            db.document("StudentGroup/"+title1).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if((task.isSuccessful())&&(task.getResult().exists()==false))
-                    {
-                        String title=enterTitle.getEditText().getText().toString().trim();
-
-
-                        StudentGroup b = new StudentGroup(title.toUpperCase());
-                        db.document("StudentGroup/"+title1).set(b).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful())
-                                {   p1.cancel();
-                                    Toast.makeText(AddStudentGroupActivity.this, "Klasė pridėta !", Toast.LENGTH_SHORT).show();
-                                }
-                                else
-                                {   p1.cancel();
-                                    Toast.makeText(AddStudentGroupActivity.this, "Bandykite dar kartą !", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+        db.collection("StudentGroup")
+                .add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("bbbb", "DocumentSnapshot written with ID: " + documentReference.getId());
                     }
-                    else
-                    {
-                        p1.cancel();
-                        Toast.makeText(AddStudentGroupActivity.this, "Šita klasė jau pridėta \n arba Blogas ryšys !", Toast.LENGTH_SHORT).show();
-
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("aaaaa", "Error adding document", e);
                     }
-                }
-            });
-
-        }}
-
-
-
-
-    @Override
-    public void onClick(View v) {
-
-        addStudentGroup();
-
+                });
     }
-
 }

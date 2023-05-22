@@ -45,6 +45,7 @@
             android:layout_height="wrap_content"
             android:drawablePadding="10dp"
             android:hint="Pavadinimas"
+            android:text="111c"
             android:inputType="text"
             android:padding="10dp"
             android:textColor="@color/black"
