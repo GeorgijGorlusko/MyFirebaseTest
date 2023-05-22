@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Vadoveliu Isdavimas</string>
+
+    <string-array name="list1">
+        <item>Select Book Category</item>
+        <item>Matematika</item>
+        <item>Fizika</item>
+        <item>Istorija</item>
+        <item>Užsienio kalba</item>
+        <item>Geografija</item>
+        <item>Chemija</item>
+        <item>Lietuvių kalba</item>
+        <item>Kita</item>
+
+
+    </string-array>
+
+
+</resources>
