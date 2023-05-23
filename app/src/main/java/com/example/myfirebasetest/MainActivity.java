@@ -91,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
         searchbook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int a = 23;
+
                 startActivity(new Intent(MainActivity.this, SearchBookFormActivity.class));
             }
         });
