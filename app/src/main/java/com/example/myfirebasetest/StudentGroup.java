@@ -12,7 +12,7 @@ public class StudentGroup {
   /*  public StudentGroup(String title) {
     }*/
 
-    public StudentGroup(String title) {
+    public StudentGroup() {
         this.title = title;
         this.type = type;
         this.total = total;

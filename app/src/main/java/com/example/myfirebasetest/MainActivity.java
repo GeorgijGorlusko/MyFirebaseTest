@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Button addStGr;
 
+    private Button issueBook;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         updatebook = findViewById(R.id.updateBookButton);
 
         searchbook = findViewById(R.id.searchBookButton);
+
+        issueBook = findViewById(R.id.issueBookButton);
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +99,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, AddStudentGroupActivity.class));
+            }
+        });
+
+        issueBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, IssueBookActivity.class));
             }
         });
 

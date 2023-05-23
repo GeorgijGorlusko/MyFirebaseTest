@@ -94,9 +94,6 @@ public class AddStudentGroupActivity extends AppCompatActivity {
 
         Map<String, Object> data = new HashMap<>();
         data.put("form", title);
-        //data.put("bookTitle", "111c");
-        //data.put("bookType", "111c");
-        //data.put("bookId", "111c");
 
         db.collection("StudentGroup")
                 .add(data)
