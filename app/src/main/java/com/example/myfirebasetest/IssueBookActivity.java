@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,6 +32,11 @@ public class IssueBookActivity extends AppCompatActivity {    List<DbBooks> dbBo
     private Spinner groupTitleSpinner;
     private SeekBar seekBar;
 
+    private TextView scaleTextView;
+    private Button submitButton;
+
+
+
     private FirebaseFirestore db;
 
     @Override
@@ -51,7 +57,7 @@ public class IssueBookActivity extends AppCompatActivity {    List<DbBooks> dbBo
         getBooks();
         getStudentGroups();
 
-        Button submitButton = findViewById(R.id.paskrstytiButton);
+         submitButton=(Button)findViewById(R.id.paskrstytiButton);
 
         submitButton.setOnClickListener(v -> {
             handleSubmitReservedBooks();
@@ -74,6 +80,9 @@ public class IssueBookActivity extends AppCompatActivity {    List<DbBooks> dbBo
         DbBooks bookArray = book.get(0);
         DbStudentGroups studentGroupsArray = group.get(0);
 
+        int totalBooksAmount = bookArray.total;
+        int availableBooksAmount = totalBooksAmount - reservedBooksAmount;
+
         Map<String, Object> data = new HashMap<>();
         data.put("bookTitle", bookTitle);
         data.put("formName", formName);
@@ -84,12 +93,35 @@ public class IssueBookActivity extends AppCompatActivity {    List<DbBooks> dbBo
         data.put("bookType", bookArray.type);
         data.put("formId", studentGroupsArray.id);
 
+
+
+
         db.collection("ReservedBooks")
                 .add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d("bbbb", "DocumentSnapshot written with ID: " + documentReference.getId());
+
+                        int difference = bookArray.available - reservedBooksAmount;
+                        int updatedAvailableBooks = Math.max(difference, 0);
+                        db.collection("Book")
+                                .document(String.valueOf(bookArray.id))
+                                .update("available", availableBooksAmount)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("bbbb", "Book availability updated");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("aaaaa", "Error updating book availability", e);
+                                    }
+                                });
+
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -107,9 +139,18 @@ public class IssueBookActivity extends AppCompatActivity {    List<DbBooks> dbBo
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         bookTitleSpinner.setAdapter(spinnerAdapter);
 
-        seekBar = findViewById(R.id.seekBar);
+        seekBar=(SeekBar)findViewById(R.id.seekBar);
+        scaleTextView=(TextView)findViewById(R.id.scaleTextView);
+        scaleTextView.setText(String.valueOf(seekBar.getProgress()));
+
+
+        seekBar.setEnabled(true);
+        seekBar.setMax(50);
+
+
 
         db.collection("Book")
+
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -119,15 +160,35 @@ public class IssueBookActivity extends AppCompatActivity {    List<DbBooks> dbBo
 
                             spinnerDataList.add(bookName);
 
-                            seekBar.setEnabled(true);
-                            seekBar.setMax(available);
+
+
+                            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                                                                   @Override
+                                                                   public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                                                                       scaleTextView.setText(String.valueOf(progress)); // Display the progress value as the scale number
+                                                                   }
+
+                                @Override
+                                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                                }
+
+                                @Override
+                                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                                }
+                            });
+
+
                         }
 
                         dbBooks = task.getResult().toObjects(DbBooks.class);
 
                         spinnerAdapter.notifyDataSetChanged();
                     }
+
                 });
+
     }
 
     private void getStudentGroups() {

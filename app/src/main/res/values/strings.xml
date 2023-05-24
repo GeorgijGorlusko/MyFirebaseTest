@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Vadoveliu Isdavimas</string>
 
+    <string name="spinnerCategory_hint">Pasirinkite kategoriją</string>
+    <string name="spinnerBook_hint">Pasirinkite vadovėlį</string>
+    <string name="spinnerStGroup_hint">Pasirinkite klasę</string>
+
     <string-array name="list1">
         <item>Select Book Category</item>
         <item>Matematika</item>

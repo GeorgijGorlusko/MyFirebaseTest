@@ -48,6 +48,9 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
         db= FirebaseFirestore.getInstance();
 
         String A[]=getResources().getStringArray(R.array.list1);
+
+
+
         ArrayAdapter adapter =new ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,A);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner1.setAdapter(adapter);

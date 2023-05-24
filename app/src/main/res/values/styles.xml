@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SeekBarWithScale">
+        <item name="android:progressDrawable">@drawable/custom_seekbar_progress</item>
+    </style>
+</resources>

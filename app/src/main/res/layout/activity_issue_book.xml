@@ -1,87 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".AddBookActivity"
     android:background="@drawable/blue_background"
-    android:padding="10dp"
-    tools:context=".IssueBookActivity">
+    android:padding="10dp">
 
     <ImageView
         android:id="@+id/bookLogo"
-        android:layout_width="202dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="85dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="85dp"
-        android:layout_marginBottom="10dp"
         android:src="@drawable/library"
-        app:layout_constraintBottom_toTopOf="@+id/addBookTitle"
-        app:layout_constraintEnd_toEndOf="@+id/BookTitleSpinner"
-        app:layout_constraintStart_toStartOf="@+id/seekBar"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="115dp"
+        android:layout_height="115dp"
+        android:layout_marginTop="60dp"
+        android:layout_centerHorizontal="true"/>
 
     <TextView
-        android:id="@+id/addBookTitle"
+        android:id="@+id/issueBookTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="21dp"
         android:fontFamily="sans-serif-condensed"
-        android:gravity="center"
+        android:layout_centerHorizontal="true"
         android:text="SKIRSTYTI VADOVĖLIUS"
         android:textColor="@color/black"
+        android:layout_below="@+id/bookLogo"
         android:textSize="28sp"
-        app:layout_constraintBottom_toTopOf="@+id/BookTitleSpinner"
-        app:layout_constraintEnd_toEndOf="@+id/BookTitleSpinner"
-        app:layout_constraintStart_toStartOf="@+id/BookTitleSpinner"
-        app:layout_constraintTop_toBottomOf="@+id/bookLogo" />
+        />
 
 
     <Spinner
         android:id="@+id/BookTitleSpinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/GroupTitleSpinner"
-        app:layout_constraintEnd_toEndOf="@+id/GroupTitleSpinner"
-        app:layout_constraintStart_toStartOf="@+id/GroupTitleSpinner"
-        app:layout_constraintTop_toBottomOf="@+id/addBookTitle" />
+        android:layout_width="310dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:prompt="@string/spinnerCategory_hint"
+        android:layout_below="@+id/issueBookTitle" />
 
     <Spinner
         android:id="@+id/GroupTitleSpinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
-        app:layout_constraintBottom_toTopOf="@+id/seekBar"
-        app:layout_constraintEnd_toEndOf="@+id/paskrstytiButton"
-        app:layout_constraintStart_toStartOf="@+id/paskrstytiButton"
-        app:layout_constraintTop_toBottomOf="@+id/BookTitleSpinner" />
+        android:layout_width="310dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:prompt="@string/spinnerStGroup_hint"
+        android:layout_below="@id/BookTitleSpinner"
+        />
 
     <SeekBar
         android:id="@+id/seekBar"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginEnd="18dp"
-        android:layout_marginBottom="29dp"
-        app:layout_constraintBottom_toTopOf="@+id/paskrstytiButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="500dp"
+        android:layout_height="40dp"
         android:enabled="false"
-        app:layout_constraintTop_toBottomOf="@+id/GroupTitleSpinner" />
+        android:layout_below="@id/GroupTitleSpinner"
+        android:tickMark="@drawable/seekbar_tick"
+        style="@style/SeekBarWithScale"
+        />
+
+    <TextView
+        android:id="@+id/scaleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignBottom="@id/seekBar"
+        android:gravity="center"
+        android:textColor="@color/red"
+        android:textSize="20sp"
+
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/seekBar"
+        />
 
     <Button
         android:id="@+id/paskrstytiButton"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="9dp"
-        android:layout_marginBottom="198dp"
+        android:layout_marginTop="198dp"
         android:text="PASKIRSTYTI VADOVĖLIUS"
         android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+        android:layout_below="@id/scaleTextView" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

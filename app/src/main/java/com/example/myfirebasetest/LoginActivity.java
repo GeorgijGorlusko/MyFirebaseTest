@@ -45,7 +45,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(String email, String password){
-
         auth.signInWithEmailAndPassword(email , password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
@@ -54,6 +53,5 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 }
