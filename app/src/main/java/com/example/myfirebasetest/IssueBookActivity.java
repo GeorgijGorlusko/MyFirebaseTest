@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,6 +31,8 @@ public class IssueBookActivity extends AppCompatActivity {    List<DbBooks> dbBo
     private Spinner bookTitleSpinner;
     private Spinner groupTitleSpinner;
     private SeekBar seekBar;
+
+    private TextView seekBarValueTextView;
 
     private FirebaseFirestore db;
 
@@ -78,7 +81,7 @@ public class IssueBookActivity extends AppCompatActivity {    List<DbBooks> dbBo
         data.put("bookTitle", bookTitle);
         data.put("formName", formName);
         data.put("reservedBooksAmount", reservedBooksAmount);
-        data.put("availableBooksAmount", bookArray.available);
+        data.put("availableBooksAmount", bookArray.available-reservedBooksAmount);
         data.put("totalBooksAmount", bookArray.total);
         data.put("bookId", bookArray.id);
         data.put("bookType", bookArray.type);
@@ -108,7 +111,25 @@ public class IssueBookActivity extends AppCompatActivity {    List<DbBooks> dbBo
         bookTitleSpinner.setAdapter(spinnerAdapter);
 
         seekBar = findViewById(R.id.seekBar);
+        seekBar.setEnabled(false);
+        seekBarValueTextView = findViewById(R.id.seekBarValueTextView);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                // Update the TextView with the current SeekBar value
+                seekBarValueTextView.setText(String.valueOf(progress));
+            }
 
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // No implementation needed
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // No implementation needed
+            }
+        });
         db.collection("Book")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -120,7 +141,8 @@ public class IssueBookActivity extends AppCompatActivity {    List<DbBooks> dbBo
                             spinnerDataList.add(bookName);
 
                             seekBar.setEnabled(true);
-                            seekBar.setMax(available);
+                            seekBar.setMax(50); // Set the maximum value of the SeekBar
+                            seekBar.setProgress(0); // Set the initial progress value
                         }
 
                         dbBooks = task.getResult().toObjects(DbBooks.class);
