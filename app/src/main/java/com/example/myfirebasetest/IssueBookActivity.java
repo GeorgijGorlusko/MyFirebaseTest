@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,7 +27,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class IssueBookActivity extends AppCompatActivity {    List<DbBooks> dbBooks;
+import dto.DbBooks;
+import dto.DbStudentGroups;
+
+public class IssueBookActivity extends AppCompatActivity {
+    List<DbBooks> dbBooks;
     List<DbStudentGroups> dbStudentGroups;
 
     private Spinner bookTitleSpinner;
@@ -45,16 +52,49 @@ public class IssueBookActivity extends AppCompatActivity {    List<DbBooks> dbBo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue_book);
 
+        TextView seekBarTooltip = findViewById(R.id.seekBarTooltip);
+        Button submitButton = findViewById(R.id.paskrstytiButton);
+
         FirebaseApp.initializeApp(this);
         db = FirebaseFirestore.getInstance();
 
         getBooks();
         getStudentGroups();
 
-        Button submitButton = findViewById(R.id.paskrstytiButton);
-
         submitButton.setOnClickListener(v -> {
             handleSubmitReservedBooks();
+        });
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                seekBarTooltip.setText(Integer.toString(i));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                seekBarTooltip.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                seekBarTooltip.setVisibility(View.GONE);
+            }
+        });
+
+        bookTitleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                DbBooks bookArray = dbBooks.get(position);
+
+                seekBar.setMax(bookArray.available);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
         });
     }
 
@@ -74,22 +114,47 @@ public class IssueBookActivity extends AppCompatActivity {    List<DbBooks> dbBo
         DbBooks bookArray = book.get(0);
         DbStudentGroups studentGroupsArray = group.get(0);
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("bookTitle", bookTitle);
-        data.put("formName", formName);
-        data.put("reservedBooksAmount", reservedBooksAmount);
-        data.put("availableBooksAmount", bookArray.available);
-        data.put("totalBooksAmount", bookArray.total);
-        data.put("bookId", bookArray.id);
-        data.put("bookType", bookArray.type);
-        data.put("formId", studentGroupsArray.id);
+        if (bookArray.available - reservedBooksAmount < 0) {
+            return;
+        }
+
+        Map<String, Object> reservedBooksData = new HashMap<>();
+        reservedBooksData.put("bookTitle", bookTitle);
+        reservedBooksData.put("formName", formName);
+        reservedBooksData.put("reservedBooksAmount", reservedBooksAmount);
+        reservedBooksData.put("availableBooksAmount", bookArray.available - reservedBooksAmount);
+        reservedBooksData.put("totalBooksAmount", bookArray.total);
+        reservedBooksData.put("bookId", bookArray.id);
+        reservedBooksData.put("bookType", bookArray.type);
+        reservedBooksData.put("formId", studentGroupsArray.id);
+        reservedBooksData.put("isHidden", false);
+
+        Map<String, Object> booksData = new HashMap<>();
+        booksData.put("title", bookTitle);
+        booksData.put("available", bookArray.available - reservedBooksAmount);
+        booksData.put("total", bookArray.total);
+        booksData.put("type", bookArray.type);
+        reservedBooksData.put("isHidden", false);
 
         db.collection("ReservedBooks")
-                .add(data)
+                .add(reservedBooksData)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d("bbbb", "DocumentSnapshot written with ID: " + documentReference.getId());
+                        db.collection("Book").document(String.valueOf(bookArray.id))
+                                .update(booksData)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        getBooks();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("aaaa", "Error updating document", e);
+                                    }
+                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -98,6 +163,8 @@ public class IssueBookActivity extends AppCompatActivity {    List<DbBooks> dbBo
                         Log.w("aaaaa", "Error adding document", e);
                     }
                 });
+
+
     }
 
     private void getBooks() {

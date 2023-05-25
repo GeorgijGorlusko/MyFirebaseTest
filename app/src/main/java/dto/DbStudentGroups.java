@@ -1,4 +1,4 @@
-package com.example.myfirebasetest;
+package dto;
 
 public class DbStudentGroups {
     public String title;
