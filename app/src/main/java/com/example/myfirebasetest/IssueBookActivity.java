@@ -27,7 +27,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class IssueBookActivity extends AppCompatActivity {    List<DbBooks> dbBooks;
+import dto.DbBooks;
+import dto.DbStudentGroups;
+
+public class IssueBookActivity extends AppCompatActivity {
+    List<DbBooks> dbBooks;
     List<DbStudentGroups> dbStudentGroups;
 
     private Spinner bookTitleSpinner;
