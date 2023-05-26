@@ -50,10 +50,10 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/searchBookButton"
+        android:id="@+id/bookInfoButton"
         android:layout_centerInParent="true"
         android:layout_below="@+id/updateBookButton"
-        android:text="Ieškoti vadovėlį"/>
+        android:text="Informacija apie vadovėlį"/>
 
 
     <Button
@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/addStGrButton"
         android:layout_centerInParent="true"
-        android:layout_below="@+id/searchBookButton"
+        android:layout_below="@+id/bookInfoButton"
         android:text="+Pridėti klasę"/>
 
     <Button

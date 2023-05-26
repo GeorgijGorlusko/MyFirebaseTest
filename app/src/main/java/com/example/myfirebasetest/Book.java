@@ -13,11 +13,11 @@ public class Book {
     public Book() {
     }
 
-    public Book(String title, String type, int total, int id) {
+    public Book(String title, String type, int total/*, int id*/) {
         this.title = title;
         this.type = type;
         this.total = total;
-        this.id = id;
+       /* this.id = id;*/
         this.available=total;
     }
 
@@ -54,13 +54,13 @@ public class Book {
         this.available = available;
     }
 
-    public int getId() {
+   /* public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
+    }*/
 
     public List<Integer> getUnit() {
         return unit;

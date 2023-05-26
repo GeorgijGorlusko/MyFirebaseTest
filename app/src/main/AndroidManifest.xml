@@ -22,7 +22,7 @@
             android:name=".SearchBookActivity"
             android:exported="false" />
         <activity
-            android:name=".SearchBookFormActivity"
+            android:name=".BookInfoActivity"
             android:exported="false" />
         <activity
             android:name=".UpdateBookActivity"

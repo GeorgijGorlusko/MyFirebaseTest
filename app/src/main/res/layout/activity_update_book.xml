@@ -29,28 +29,7 @@
         android:gravity="center"
         android:id="@+id/updateBookTitle"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/idEt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:hintEnabled="false"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/updateBookTitle">
 
-        <EditText
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawablePadding="10dp"
-            android:hint="ID"
-            android:inputType="number"
-            android:padding="10dp"
-            android:textColor="@color/black"
-            android:textColorHint="@color/gray"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/titleEt"
@@ -60,7 +39,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginTop="10dp"
-        android:layout_below="@id/idEt">
+        android:layout_below="@id/updateBookTitle">
 
         <EditText
 
