@@ -1,100 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BookInfoActivity"
     android:background="@drawable/blue_background"
-    android:padding="10dp">
+    android:padding="10dp"
+    tools:context=".BookInfoActivity">
 
     <TextView
+        android:id="@+id/searchBookFTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="IEŠKOTI VADOVĖLĮ"
-        android:textSize="28sp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="220dp"
+        android:layout_marginEnd="34dp"
         android:fontFamily="sans-serif-condensed"
-        android:textColor="@color/black"
-        android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:id="@+id/searchBookFTitle"/>
+        android:text="INFORMACIJA AOIE VADOVĖLĮ"
+        android:textColor="@color/black"
+        android:textSize="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editBid3"
-        android:layout_width="match_parent"
+    <Spinner
+        android:id="@+id/bookTypeInfoSpinner"
+        android:layout_width="0dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="23dp"
+        android:layout_marginBottom="34dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/searchBookFTitle" />
+
+    <Spinner
+        android:id="@+id/bookNameInfoSpinner"
+        android:layout_width="0dp"
+        android:layout_height="33dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:hintEnabled="false"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/searchBookFTitle">
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="60dp"
+        android:text="Kategorija"
+        app:layout_constraintEnd_toStartOf="@+id/bookTypeInfoSpinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchBookFTitle" />
 
-        <EditText
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawablePadding="10dp"
-            android:hint="ID"
-            android:inputType="number"
-            android:padding="10dp"
-            android:textColor="@color/black"
-            android:textColorHint="@color/gray"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editTitle3"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:hintEnabled="false"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/editBid3">
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="31dp"
+        android:layout_marginEnd="44dp"
+        android:text="Pavadinimas"
+        app:layout_constraintEnd_toStartOf="@+id/bookNameInfoSpinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-        <EditText
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="31dp"
+        android:text="Laisva"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawablePadding="10dp"
-            android:hint="Pavadinimas"
-            android:inputType="text"
-            android:padding="10dp"
-            android:textColor="@color/black"
-            android:textColorHint="@color/gray"/>
+    <TextView
+        android:id="@+id/availableBooksInfoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:text=""
+        app:layout_constraintEnd_toStartOf="@+id/totalAmountInfoTextView"
+        app:layout_constraintStart_toStartOf="@+id/totalAmountInfoTextView"
+        app:layout_constraintTop_toBottomOf="@+id/bookNameInfoSpinner" />
 
-        <Spinner
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:id="@+id/spinner3"/>
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="30dp"
+        android:text="Bendras kiekis"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-        <CheckBox
-            android:layout_marginTop="10dp"
-            android:id="@+id/onlyAvailable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Rodyti tik egzempliorius, esančius saugykloje"/>
-
-        <Button
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="PAIEŠKA"
-            android:id="@+id/button3"/>
-
-
-
-
-
-
-
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
+    <TextView
+        android:id="@+id/totalAmountInfoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="43dp"
+        android:text=""
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
+        app:layout_constraintStart_toEndOf="@+id/textView5" />
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

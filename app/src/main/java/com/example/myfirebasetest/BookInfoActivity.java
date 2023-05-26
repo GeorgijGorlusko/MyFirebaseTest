@@ -9,22 +9,42 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import dto.DbBooks;
+import dto.DbStudentGroups;
 
 public class BookInfoActivity extends AppCompatActivity {
 
 
-    private TextInputLayout editTitle3;
-    private TextInputLayout editBid3;
-    private Spinner spinner3;
-    private Button button3;
+    List<DbBooks> dbBooks;
+    List<DbStudentGroups> dbStudentGroups;
+
+    private Spinner bookTitleSpinner;
+    private Spinner groupTitleSpinner;
+    private SeekBar seekBar;
+
+    private FirebaseFirestore db;
     private String type;
-    private CheckBox checkBox;
+    private Spinner bookTypeInfoSpinner;
+
+
+
+    private Spinner bookNameInfoSpinner;
 
     @Override
     public void onBackPressed() {
@@ -33,64 +53,58 @@ public class BookInfoActivity extends AppCompatActivity {
 
     }
 
-    private boolean verifyTitle()
-    {
-        String t=editTitle3.getEditText().getText().toString().trim();
-        if(t.isEmpty())
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-
-    private boolean verifyBid()
-    {
-        String b=editBid3.getEditText().getText().toString().trim();
-        if(b.isEmpty())
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
 
 
-    private boolean verifyCategory()
-    {
-        if (type.equals("Pasirinkite kategoriją"))
-        {
-            return false;
-        }
-        return true;
-    }
+
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_info);
+
+
         FirebaseApp.initializeApp(this);
-        editTitle3=(TextInputLayout)findViewById(R.id.editTitle3);
-        editBid3=(TextInputLayout) findViewById(R.id.editBid3);
-        spinner3=(Spinner)findViewById(R.id.spinner3);
-        button3=(Button)findViewById(R.id.button3);
-        checkBox=(CheckBox)findViewById(R.id.onlyAvailable);
+        db = FirebaseFirestore.getInstance();
+
+        getBooks();
 
 
-        String A[]=getResources().getStringArray(R.array.list1);
-        ArrayAdapter adapter =new ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,A);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner3.setAdapter(adapter);
-        spinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        bookTypeInfoSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                type=parent.getItemAtPosition(position).toString();
+                if (bookTypeInfoSpinner.getSelectedItemPosition() == AdapterView.INVALID_POSITION){
+                    return;
+
+                }
+                String bookType = bookTypeInfoSpinner.getSelectedItem().toString();
+                List<DbBooks> book = dbBooks.stream()
+                        .filter(a -> Objects.equals(a.type, bookType))
+                        .collect(Collectors.toList());
+                DbBooks array = book.get(0);
+                List<String> bookNameInfoSpinnerDataList = new ArrayList<>();
+                ArrayAdapter<String> spinnerAdapter2 = new ArrayAdapter<>(BookInfoActivity.this, android.R.layout.simple_spinner_item, bookNameInfoSpinnerDataList);
+                spinnerAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                bookNameInfoSpinner.setAdapter(spinnerAdapter2);
+
+
+                for (DbBooks innerArray: book) {
+
+                    bookNameInfoSpinnerDataList.add(innerArray.title);
+
+                }
+
+                TextView availableTextView = findViewById(R.id.availableBooksInfoTextView);
+                TextView totalTextView = findViewById(R.id.totalAmountInfoTextView);
+                availableTextView.setText(Integer.toString(array.available));
+                totalTextView.setText(Integer.toString(array.total));
+
+                spinnerAdapter2.notifyDataSetChanged();
             }
+
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -98,84 +112,71 @@ public class BookInfoActivity extends AppCompatActivity {
             }
         });
 
-        button3.setOnClickListener(new View.OnClickListener() {
+        bookNameInfoSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String bookName = bookNameInfoSpinner.getSelectedItem().toString();
+                List<DbBooks> book = dbBooks.stream()
+                        .filter(a -> Objects.equals(a.title, bookName))
+                        .collect(Collectors.toList());
+                DbBooks array = book.get(0);
 
-                if(!(verifyCategory()|verifyTitle()|verifyBid()))
-                {
-                    Toast.makeText(BookInfoActivity.this, "Select at least parameter !", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Intent intent=new Intent(getApplicationContext(), BookInfoActivity.class);
+                TextView availableTextView = findViewById(R.id.availableBooksInfoTextView);
+                TextView totalTextView = findViewById(R.id.totalAmountInfoTextView);
+                availableTextView.setText(Integer.toString(array.available));
+                totalTextView.setText(Integer.toString(array.total));
 
-                if(verifyBid()&&checkBox.isChecked())
-                {
+            }
 
-                    intent.putExtra("id",1);
-                    intent.putExtra("bid",Integer.parseInt(editBid3.getEditText().getText().toString().trim()));
-                    startActivity(intent);
 
-                }
-                else if(verifyBid()&&!checkBox.isChecked())
-                {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-                    intent.putExtra("id",2);
-                    intent.putExtra("bid",Integer.parseInt(editBid3.getEditText().getText().toString().trim()));
-                    startActivity(intent);
-
-                }
-                else if(verifyTitle()&&verifyCategory()&&checkBox.isChecked())
-                {
-
-                    intent.putExtra("id",3);
-                    intent.putExtra("btitle",editTitle3.getEditText().getText().toString().trim());
-                    intent.putExtra("btype",type);
-                    startActivity(intent);
-
-                }
-                else if(verifyTitle()&&verifyCategory()&&!checkBox.isChecked())
-                {
-
-                    intent.putExtra("id",4);
-                    intent.putExtra("btitle",editTitle3.getEditText().getText().toString().trim());
-                    intent.putExtra("btype",type);
-                    startActivity(intent);
-
-                }
-                else if(verifyTitle()&&!verifyCategory()&&checkBox.isChecked())
-                {
-
-                    intent.putExtra("id",5);
-                    intent.putExtra("btitle",editTitle3.getEditText().getText().toString().trim());
-                    startActivity(intent);
-
-                }
-                else if(verifyTitle()&&!verifyCategory()&&!checkBox.isChecked())
-                {
-
-                    intent.putExtra("id",6);
-                    intent.putExtra("btitle",editTitle3.getEditText().getText().toString().trim());
-                    startActivity(intent);
-
-                }
-                else if(!verifyTitle()&&verifyCategory()&&checkBox.isChecked())
-                {
-
-                    intent.putExtra("id",7);
-                    intent.putExtra("btype",type);
-                    startActivity(intent);
-
-                }
-                else if(!verifyTitle()&&verifyCategory()&&!checkBox.isChecked())
-                {
-
-                    intent.putExtra("id",8);
-                    intent.putExtra("btype",type);
-                    startActivity(intent);
-
-                }
             }
         });
+    }
+
+    private void getBooks() {
+        bookTypeInfoSpinner = findViewById(R.id.bookTypeInfoSpinner);
+        List<String> bookTypeInfoSpinnerDataList = new ArrayList<>();
+        ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<>(BookInfoActivity.this, android.R.layout.simple_spinner_item, bookTypeInfoSpinnerDataList);
+        spinnerAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        bookTypeInfoSpinner.setAdapter(spinnerAdapter1);
+
+        bookNameInfoSpinner = findViewById(R.id.bookNameInfoSpinner);
+        List<String> bookNameInfoSpinnerDataList = new ArrayList<>();
+        ArrayAdapter<String> spinnerAdapter2 = new ArrayAdapter<>(BookInfoActivity.this, android.R.layout.simple_spinner_item, bookNameInfoSpinnerDataList);
+        spinnerAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        bookNameInfoSpinner.setAdapter(spinnerAdapter2);
+
+        TextView availableTextView = findViewById(R.id.availableBooksInfoTextView);
+
+        TextView totalTextView = findViewById(R.id.totalAmountInfoTextView);
+
+        db.collection("Book")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String bookName = document.getString("title");
+                            int available = Math.toIntExact(document.getLong("available"));
+                            String bookType = document.getString("type");
+                            int amount = Math.toIntExact(document.getLong("total"));
+
+                            if (!bookTypeInfoSpinnerDataList.contains(bookType)){
+                                bookTypeInfoSpinnerDataList.add(bookType);
+                            }
+                            bookNameInfoSpinnerDataList.add(bookName);
+                            availableTextView.setText(Integer.toString(available));
+                            totalTextView.setText(Integer.toString(amount));
+
+                        }
+
+                        dbBooks = task.getResult().toObjects(DbBooks.class);
+
+                        spinnerAdapter1.notifyDataSetChanged();
+                        spinnerAdapter2.notifyDataSetChanged();
+                    }
+                });
     }
 }
