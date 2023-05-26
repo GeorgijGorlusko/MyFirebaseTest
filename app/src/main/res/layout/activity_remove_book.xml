@@ -30,7 +30,7 @@
         android:id="@+id/removeBookTitle"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/idEt"
+        android:id="@+id/titleEt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:hintEnabled="false"
@@ -44,8 +44,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="10dp"
-            android:hint="ID"
-            android:inputType="number"
+            android:hint="Vadovėlio pavadinimas"
+            android:inputType="text"
             android:padding="10dp"
             android:textColor="@color/black"
             android:textColorHint="@color/gray"/>
@@ -54,9 +54,9 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:id="@+id/findBook"
-        android:layout_below="@id/idEt"
+        android:layout_below="@id/titleEt"
         android:text="Rasti ir pašalinti"/>
 
 </RelativeLayout>

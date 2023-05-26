@@ -1,6 +1,5 @@
 package com.example.myfirebasetest;
 
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.annotation.NonNull;
@@ -24,91 +23,77 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class RemoveBookActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button findBook;
-
-    private TextInputLayout enterBid;
-
+    private TextInputLayout enterTitle; // Updated variable
     FirebaseFirestore db;
-
     private ProgressDialog progressDialog;
-
     Book b1;
+
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         finish();
         super.onBackPressed();
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remove_book);
-        findBook=(Button)findViewById(R.id.findBook);
-        enterBid=(TextInputLayout)findViewById(R.id.idEt);
+        findBook = findViewById(R.id.findBook);
+        enterTitle = findViewById(R.id.titleEt); // Updated ID
         FirebaseApp.initializeApp(this);
-        db=FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
         findBook.setOnClickListener(this);
-        progressDialog=new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
-        b1=new Book();
-
-        findBook.setOnClickListener(this);
-
+        b1 = new Book();
     }
 
     @Override
     public void onClick(View v) {
         progressDialog.setMessage("Palaukite");
         progressDialog.show();
-        if(v==findBook) {
-            if (enterBid.getEditText().getText().toString().trim().isEmpty()) {
-
+        if (v == findBook) {
+            if (enterTitle.getEditText().getText().toString().trim().isEmpty()) {
                 progressDialog.cancel();
-                enterBid.setError("Reikalingas vadovėlio ID ");
-                enterBid.setErrorEnabled(true);
+                enterTitle.setError("Reikalingas vadovėlio pavadinimas");
+                enterTitle.setErrorEnabled(true);
                 return;
             }
 
-            String id = enterBid.getEditText().getText().toString().trim();
-            db.document("Book/" + id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            String title = enterTitle.getEditText().getText().toString().trim(); // Updated line
+            db.document("Book/" + title).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         if (task.getResult().exists()) {
-                            AlertDialog.Builder alert= new AlertDialog.Builder(RemoveBookActivity.this);
+                            AlertDialog.Builder alert = new AlertDialog.Builder(RemoveBookActivity.this);
                             b1 = task.getResult().toObject(Book.class);
                             String temp = "Title : " + b1.getTitle() + "\nCategory : " + b1.getType() + "\nNo. of Units : " + b1.getTotal();
                             progressDialog.cancel();
                             alert.setMessage(temp).setTitle("Patvirtinkite !").setCancelable(false).setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-
                                     dialog.cancel();
                                     progressDialog.setMessage("Šalinama ... ");
                                     progressDialog.show();
-                                    if(b1.getAvailable()==b1.getTotal())
-                                    {
-                                        db.document("Book/"+enterBid.getEditText().getText().toString().trim()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    if (b1.getAvailable() == b1.getTotal()) {
+                                        db.document("Book/" + title).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 progressDialog.cancel();
-                                                Toast.makeText(RemoveBookActivity.this, "Vadovėlis Pašalintas", Toast.LENGTH_SHORT).show();
-
+                                                Toast.makeText(RemoveBookActivity.this, "Vadovėlis pašalintas", Toast.LENGTH_SHORT).show();
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
                                                 progressDialog.cancel();
-                                                Toast.makeText(RemoveBookActivity.this, "Bandykite dar kartą !", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(RemoveBookActivity.this, "Bandykite dar kartą!", Toast.LENGTH_SHORT).show();
                                             }
                                         });
+                                    } else {
+                                        progressDialog.cancel();
+                                        Toast.makeText(RemoveBookActivity.this, "Šitas vadovėlis išduotas skaitytojui!\nPašalinti galima grąžinus vadovėlį į fondus.", Toast.LENGTH_LONG).show();
                                     }
-                                    else
-                                    {   progressDialog.cancel();
-                                        Toast.makeText(RemoveBookActivity.this, "Šitas vadovėlis išduotas skaitytojui  !\nPašalinti galima grąžinus vadovėlį į fondus.", Toast.LENGTH_LONG).show();
-
-                                    }
-
                                 }
                             }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                                 @Override
@@ -116,25 +101,18 @@ public class RemoveBookActivity extends AppCompatActivity implements View.OnClic
                                     dialog.cancel();
                                 }
                             });
-
-                            AlertDialog alertDialog=alert.create();
+                            AlertDialog alertDialog = alert.create();
                             alertDialog.show();
-
-
                         } else {
                             progressDialog.cancel();
-                            Toast.makeText(RemoveBookActivity.this, "Vadovėlis nerastas !", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RemoveBookActivity.this, "Vadovėlis nerastas!", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         progressDialog.cancel();
-                        Toast.makeText(RemoveBookActivity.this, "Bandykite dar kartą !", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RemoveBookActivity.this, "Bandykite dar kartą!", Toast.LENGTH_SHORT).show();
                     }
-
                 }
             });
-
         }
     }
-
-
 }

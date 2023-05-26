@@ -23,7 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class UpdateBookActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextInputLayout editTitle2;
-    private TextInputLayout editBid2;
+
     private TextInputLayout editUnits2;
     private Spinner spinner2;
     private FirebaseFirestore db;
@@ -47,20 +47,7 @@ public class UpdateBookActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    private boolean verifyBid()
-    {
-        String b=editBid2.getEditText().getText().toString().trim();
-        if(b.isEmpty())
-        {  editBid2.setErrorEnabled(true);
-            editBid2.setError("Book ID Required");
-            return true;
-        }
-        else
-        {
-            editBid2.setErrorEnabled(false);
-            return false;
-        }
-    }
+
 
     private boolean verifyUnits()
     {
@@ -86,8 +73,7 @@ public class UpdateBookActivity extends AppCompatActivity implements View.OnClic
 
     private void updateBook()
     {
-        if(verifyBid())
-            return;
+
 
         if(!(verifyCategory()|verifyTitle()|verifyUnits()))
         {
@@ -98,7 +84,7 @@ public class UpdateBookActivity extends AppCompatActivity implements View.OnClic
         p1.setMessage("Updating ...");
         p1.show();
 
-        db.document("Book/"+Integer.parseInt(editBid2.getEditText().getText().toString().trim())).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.document("Book/"+Integer.parseInt(editTitle2.getEditText().getText().toString().trim())).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful())
@@ -121,7 +107,7 @@ public class UpdateBookActivity extends AppCompatActivity implements View.OnClic
                             book.setTitle(editTitle2.getEditText().getText().toString().trim().toUpperCase());
                         }
                         if(qtity>=0) {
-                            db.document("Book/" + Integer.parseInt(editBid2.getEditText().getText().toString().trim())).set(book).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            db.document("Book/" + editTitle2.getEditText().getText().toString().trim()).set(book).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
@@ -173,7 +159,7 @@ public class UpdateBookActivity extends AppCompatActivity implements View.OnClic
         FirebaseApp.initializeApp(this);
 
         editTitle2=(TextInputLayout)findViewById(R.id.titleEt);
-        editBid2=(TextInputLayout) findViewById(R.id.idEt);
+
         editUnits2=(TextInputLayout)findViewById(R.id.unitsEt);
         spinner2=(Spinner)findViewById(R.id.spinner1);
         button2=(Button)findViewById(R.id.button1);

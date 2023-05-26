@@ -5,19 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button updatebook;
 
-    private Button searchbook;
+    private Button bookInfo;
 
     private Button addStGr;
 
@@ -53,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         updatebook = findViewById(R.id.updateBookButton);
 
-        searchbook = findViewById(R.id.searchBookButton);
+        bookInfo = findViewById(R.id.bookInfoButton);
 
         issueBook = findViewById(R.id.issueBookButton);
 
@@ -88,12 +81,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        searchbook.setOnClickListener(new View.OnClickListener() {
+        bookInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int a = 23;
 
-                startActivity(new Intent(MainActivity.this, SearchBookFormActivity.class));
+
+                startActivity(new Intent(MainActivity.this, BookInfoActivity.class));
             }
         });
 

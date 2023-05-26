@@ -15,9 +15,8 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-public class SearchBookFormActivity extends AppCompatActivity {
+public class BookInfoActivity extends AppCompatActivity {
 
 
     private TextInputLayout editTitle3;
@@ -74,7 +73,7 @@ public class SearchBookFormActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_book_form);
+        setContentView(R.layout.activity_book_info);
         FirebaseApp.initializeApp(this);
         editTitle3=(TextInputLayout)findViewById(R.id.editTitle3);
         editBid3=(TextInputLayout) findViewById(R.id.editBid3);
@@ -105,10 +104,10 @@ public class SearchBookFormActivity extends AppCompatActivity {
 
                 if(!(verifyCategory()|verifyTitle()|verifyBid()))
                 {
-                    Toast.makeText(SearchBookFormActivity.this, "Select at least parameter !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BookInfoActivity.this, "Select at least parameter !", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Intent intent=new Intent(getApplicationContext(),SearchBookFormActivity.class);
+                Intent intent=new Intent(getApplicationContext(), BookInfoActivity.class);
 
                 if(verifyBid()&&checkBox.isChecked())
                 {

@@ -38,7 +38,7 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_book);
         FirebaseApp.initializeApp(this);
-        enterId=(TextInputLayout)findViewById(R.id.idEt);
+        //enterId=(TextInputLayout)findViewById(R.id.idEt);
         enterTitle=(TextInputLayout)findViewById(R.id.titleEt);
         spinner1=(Spinner)findViewById(R.id.spinner1);
         enterEgzNum=(TextInputLayout)findViewById(R.id.unitsEt);
@@ -81,7 +81,7 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private boolean verifyBid()
+  /*  private boolean verifyBid()
     {
         String b=enterId.getEditText().getText().toString().trim();
         if(b.isEmpty())
@@ -94,7 +94,7 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
             enterId.setErrorEnabled(false);
             return false;
         }
-    }
+    }*/
 
     private boolean verifyUnits()
     {
@@ -124,7 +124,7 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
     private void addBook()
     {
 
-        boolean res=(verifyBid()|verifyTitle()|verifyUnits()|verifyCategory());
+        boolean res=(/*verifyBid()|*/verifyTitle()|verifyUnits()|verifyCategory());
         if(res==true)
             return;
         else
@@ -132,18 +132,21 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
 
             p1.setMessage("Pridedamas vadovėlis");
             p1.show();
-            final String id=enterId.getEditText().getText().toString().trim();
-            int id1=Integer.parseInt(id);
-            db.document("Book/"+id1).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            final String title=enterTitle.getEditText().getText().toString().trim();
+
+
+            String title1=enterTitle.getEditText().getText().toString().trim();
+            db.document("Book/"+title1).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if((task.isSuccessful())&&(task.getResult().exists()==false))
-                    {    String id=enterId.getEditText().getText().toString().trim();
+                    {   /*String id=enterId.getEditText().getText().toString().trim();*/
                         String title=enterTitle.getEditText().getText().toString().trim();
                         String units=enterEgzNum.getEditText().getText().toString().trim();
-                        int id1=Integer.parseInt(id),unit1=Integer.parseInt(units);
-                        Book b = new Book(title.toUpperCase(),type,unit1,id1);
-                        db.document("Book/"+id1).set(b).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                      /* int id1=Integer.parseInt(id),*/int unit1=Integer.parseInt(units);
+                        Book b = new Book(title.toUpperCase(),type,unit1/*,id1*/);
+                        db.document("Book/"+title1).set(b).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful())
@@ -166,7 +169,8 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
                 }
             });
 
-        }}
+        }
+    }
 
 
     private TextInputLayout enterTitle;
