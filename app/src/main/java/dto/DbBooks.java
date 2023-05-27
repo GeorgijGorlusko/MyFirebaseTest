@@ -6,4 +6,5 @@ public class DbBooks {
     public int total;
     public int id;
     public String type;
+    public String issuedToGroups;
 }
