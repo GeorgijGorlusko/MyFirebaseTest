@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="email"
-        android:text="vadsist23@gmail.com"
+        android:text=""
         android:inputType="textEmailAddress"
         android:layout_marginTop="110dp"
         android:textSize="28sp"/>
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="password"
-        android:text="googoo23"
+        android:text=""
         android:inputType="textPassword"
         android:layout_below="@id/email"
         android:layout_marginTop="100dp"
