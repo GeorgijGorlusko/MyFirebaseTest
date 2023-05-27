@@ -134,6 +134,13 @@ public class IssueBookActivity extends AppCompatActivity {
         booksData.put("available", bookArray.available - reservedBooksAmount);
         booksData.put("total", bookArray.total);
         booksData.put("type", bookArray.type);
+       String issuedToForms = "";
+        if (bookArray.issuedToGroups != null ) {
+            issuedToForms += bookArray.issuedToGroups + ",";
+
+        }
+        issuedToForms += formName;
+        booksData.put("issuedToGroups", issuedToForms);
         reservedBooksData.put("isHidden", false);
 
         db.collection("ReservedBooks")

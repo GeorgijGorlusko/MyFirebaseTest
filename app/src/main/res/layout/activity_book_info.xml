@@ -13,24 +13,25 @@
         android:id="@+id/searchBookFTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="220dp"
-        android:layout_marginEnd="34dp"
+        android:layout_marginTop="240dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginBottom="15dp"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center"
-        android:text="INFORMACIJA AOIE VADOVĖLĮ"
+        android:text="INFORMACIJA APIE VADOVĖLĮ"
         android:textColor="@color/black"
         android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bookTypeInfoSpinner"
+        app:layout_constraintEnd_toEndOf="@+id/bookTypeInfoSpinner"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/bookTypeInfoSpinner"
         android:layout_width="0dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="23dp"
-        android:layout_marginBottom="34dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        android:layout_height="0dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="21dp"
+        app:layout_constraintBottom_toTopOf="@+id/bookNameInfoSpinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/searchBookFTitle" />
@@ -38,18 +39,19 @@
     <Spinner
         android:id="@+id/bookNameInfoSpinner"
         android:layout_width="0dp"
-        android:layout_height="33dp"
-        android:layout_marginEnd="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
+        android:layout_marginEnd="23dp"
+        android:layout_marginBottom="31dp"
+        app:layout_constraintBottom_toTopOf="@+id/availableBooksInfoTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/bookTypeInfoSpinner" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
+        android:layout_marginStart="56dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="60dp"
         android:text="Kategorija"
@@ -61,9 +63,9 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
+        android:layout_marginStart="56dp"
         android:layout_marginTop="31dp"
-        android:layout_marginEnd="44dp"
+        android:layout_marginEnd="45dp"
         android:text="Pavadinimas"
         app:layout_constraintEnd_toStartOf="@+id/bookNameInfoSpinner"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,40 +75,71 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="31dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginEnd="85dp"
+        android:layout_marginBottom="30dp"
         android:text="Laisva"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintBottom_toTopOf="@+id/textView5"
+        app:layout_constraintEnd_toStartOf="@+id/availableBooksInfoTextView"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/availableBooksInfoTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
+        android:layout_marginEnd="210dp"
+        android:layout_marginBottom="30dp"
         android:text=""
-        app:layout_constraintEnd_toStartOf="@+id/totalAmountInfoTextView"
-        app:layout_constraintStart_toStartOf="@+id/totalAmountInfoTextView"
+        app:layout_constraintBottom_toTopOf="@+id/totalAmountInfoTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/bookNameInfoSpinner" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginEnd="44dp"
         android:text="Bendras kiekis"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/totalAmountInfoTextView"
+        app:layout_constraintEnd_toStartOf="@+id/totalAmountInfoTextView"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/totalAmountInfoTextView"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="200dp"
+        android:layout_marginBottom="35dp"
+        android:text=""
+        app:layout_constraintBottom_toTopOf="@+id/issuedToGroupsTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/availableBooksInfoTextView" />
+
+    <TextView
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="43dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginEnd="39dp"
+        android:text="Išduota klasei"
+        app:layout_constraintBaseline_toBaselineOf="@+id/issuedToGroupsTextView"
+        app:layout_constraintEnd_toStartOf="@+id/issuedToGroupsTextView"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/issuedToGroupsTextView"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="201dp"
+        android:layout_marginBottom="198dp"
         android:text=""
-        app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
-        app:layout_constraintStart_toEndOf="@+id/textView5" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/totalAmountInfoTextView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

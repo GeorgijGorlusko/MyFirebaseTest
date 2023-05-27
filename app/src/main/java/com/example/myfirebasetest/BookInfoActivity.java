@@ -41,7 +41,7 @@ public class BookInfoActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String type;
     private Spinner bookTypeInfoSpinner;
-
+    private TextView issuedToGroupsTextView;
 
 
     private Spinner bookNameInfoSpinner;
@@ -101,6 +101,7 @@ public class BookInfoActivity extends AppCompatActivity {
                 TextView totalTextView = findViewById(R.id.totalAmountInfoTextView);
                 availableTextView.setText(Integer.toString(array.available));
                 totalTextView.setText(Integer.toString(array.total));
+                issuedToGroupsTextView.setText(array.issuedToGroups);
 
                 spinnerAdapter2.notifyDataSetChanged();
             }
@@ -125,7 +126,7 @@ public class BookInfoActivity extends AppCompatActivity {
                 TextView totalTextView = findViewById(R.id.totalAmountInfoTextView);
                 availableTextView.setText(Integer.toString(array.available));
                 totalTextView.setText(Integer.toString(array.total));
-
+                issuedToGroupsTextView.setText(array.issuedToGroups);
             }
 
 
@@ -152,6 +153,7 @@ public class BookInfoActivity extends AppCompatActivity {
         TextView availableTextView = findViewById(R.id.availableBooksInfoTextView);
 
         TextView totalTextView = findViewById(R.id.totalAmountInfoTextView);
+        issuedToGroupsTextView = findViewById(R.id.issuedToGroupsTextView);
 
         db.collection("Book")
                 .get()
@@ -162,6 +164,7 @@ public class BookInfoActivity extends AppCompatActivity {
                             int available = Math.toIntExact(document.getLong("available"));
                             String bookType = document.getString("type");
                             int amount = Math.toIntExact(document.getLong("total"));
+                            String forms = document.getString("issuedToGroups");
 
                             if (!bookTypeInfoSpinnerDataList.contains(bookType)){
                                 bookTypeInfoSpinnerDataList.add(bookType);
@@ -170,6 +173,7 @@ public class BookInfoActivity extends AppCompatActivity {
                             availableTextView.setText(Integer.toString(available));
                             totalTextView.setText(Integer.toString(amount));
 
+                            issuedToGroupsTextView.setText(forms);
                         }
 
                         dbBooks = task.getResult().toObjects(DbBooks.class);
